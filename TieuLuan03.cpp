@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <queue>
 
 
 typedef struct Sach {
@@ -28,6 +27,7 @@ QNode* newNode(Sach x) {
     return p;
 }
 
+// Thêm vào cuối hàng đợi
 void enQueue(Queue* q, Sach x) {
     QNode* p = newNode(x);
     if (q->front == NULL) {
@@ -38,6 +38,8 @@ void enQueue(Queue* q, Sach x) {
     q->rear = p;
 }
 
+
+// Lấy ra đầu hàng đợi
 void deQueue(Queue* q) {
     if (q->front == NULL) {
         return;
@@ -50,6 +52,7 @@ void deQueue(Queue* q) {
     delete p;
 }
 
+// kích thước hàng đợi
 int size(Queue* q) {
     int count = 0;
     QNode* p = q->front;
@@ -60,6 +63,7 @@ int size(Queue* q) {
     return count;
 }
 
+// Kiểm tra hàng đợi rỗng
 bool isEmpty(Queue* q) {
     return q->front == NULL;
 }

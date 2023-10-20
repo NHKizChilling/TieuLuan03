@@ -22,27 +22,34 @@ typedef struct Queue {
 
 QNode* newNode(Sach x) {
     QNode* p = new QNode;
+    if(p == NULL){
+        printf("Loi, khong the tao doi tuong");
+        return NULL;
+    }
     p->data = x;
     p->next = NULL;
     return p;
 }
 
 // Thêm vào cuối hàng đợi
-void enQueue(Queue* q, Sach x) {
+bool enQueue(Queue* q, Sach x) {
     QNode* p = newNode(x);
-    if (q->front == NULL) {
+    if(p == NULL)
+        return false;
+    if (isEmpty(q)) {
         q->front = q->rear = p;
-        return;
+        return true;
     }
     q->rear->next = p;
     q->rear = p;
+    return true;
 }
 
 
 // Lấy ra đầu hàng đợi
-void deQueue(Queue* q) {
-    if (q->front == NULL) {
-        return;
+bool deQueue(Queue* q) {
+    if (isEmpty(q)) {
+        return false;
     }
     QNode* p = q->front;
     q->front = q->front->next;
@@ -50,6 +57,7 @@ void deQueue(Queue* q) {
         q->rear = NULL;
     }
     delete p;
+    return true;
 }
 
 // kích thước hàng đợi

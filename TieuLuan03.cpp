@@ -7,7 +7,7 @@ void initList(LIST &l);
 void nhapVaoDanhSachTruyen(LIST &l);
 NODE* timKiemT(LIST l, char maTruyen[]);
 NODEMUON* timKiemKH(QUEUE q, char maKhachHang[]);
-int themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]);
+void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]);
 int xoaTruyen(QUEUE &q, char maTruyen[]);
 int soLuongQuyenTruyen(QUEUE q);
 bool suaTruyen(LIST &L, char maTruyen[]);
@@ -56,22 +56,16 @@ int main() {
 			case 1:
 				nhapVaoDanhSachTruyen(danhSachTruyen);
 				break;
-			case 2:{
+			case 2:
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
 				fflush(stdin);
 				printf("Nhap ma khach hang: ");
 				gets(maKhachHang);
 				fflush(stdin);
-				int check = themTruyen(danhSachMuon, danhSachTruyen, maTruyen, maKhachHang);
-				if(check == 1)
-					printf("Them thanh cong.\n");
-				else if(check == -1)
-					printf("Them khong thanh cong.\n");
-				else
-					printf("Khong tim thay truyen.\n");
+				themTruyen(danhSachMuon, danhSachTruyen, maTruyen, maKhachHang);
+				printf("run to here 4\n");
 				break;
-			}
 			case 3:
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
@@ -145,7 +139,7 @@ int main() {
 				danhSachTruyenMuonQuaHan(danhSachMuon, ngayMuon);
 				break;
 			case 12: 
-				readBooksFromFile("T:/books.txt", danhSachTruyen);
+				readBooksFromFile("books.txt", danhSachTruyen);
 				break;
 			case 13:
 				printf("Nhap duong dan file: ");
@@ -218,12 +212,13 @@ NODE* timKiemT(LIST l, char maTruyen[]) {
 	return NULL;
 }
 
-int themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
+void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
 	NODE* truyen = timKiemT(l, maTruyen);
 	if(truyen == NULL)
-		return 1;
+		return;
+	printf("Run to here 1\n");
 	NODEMUON* khachHang = timKiemKH(q, maKhachHang);
-	if(khachHang->kh.maKH == NULL) {
+	if(khachHang == NULL) {
 		printf("Khong tim thay khach hang.\n");
 		printf("Tao them khach hang moi?\n");
 		printf("1. Co\n");
@@ -231,20 +226,21 @@ int themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
 		int choice;
 		scanf("%d", &choice);
 		fflush(stdin);
-		if(choice == 1) {
-			KHACHHANG tmp1;
-			nhapInfoKhachHang(tmp1);
-			khachHang->kh = tmp1;
+		if (choice == 1) {
+			khachHang = new NODEMUON; // Allocate memory for khachHang
+			khachHang->kh = nhapInfoKhachHang();
+			printf("Run to here 1.1\n");
+		} else {
+			printf("Run to here 2");
+			return;
 		}
-		else
-			return -1;
 	}
+	printf("Run to here 3\n");
 	NODEMUON tmp;
 	tmp.data = truyen->data;
 	tmp.kh = khachHang->kh;
 	nhapNgayMuon(tmp.ngayMuon);
 	enQueue(q, tmp);
-	return 1;
 }
 
 int xoaTruyen(QUEUE &q, char maTruyen[]){

@@ -2,29 +2,16 @@
 #include <string.h> 
 #include <stdlib.h>
 #include "Queue.h"
-
-typedef struct NodeT { // Node chỉ để chưa danh sách truyện
-    TRUYEN data;
-    NodeT* pNext;
-}NODE;
-
-typedef struct ListT { // Danh sách truyện
-	NODE* pHead;
-	NODE* pTail;
-}LIST;
+#include "NhapXuat.h"
 
 void initList(LIST &l);
-TRUYEN nhap1QuyenTruyen();
 void nhapVaoDanhSachTruyen(LIST &l);
-void xuatDanhSachCacQuyenTruyen(LIST l);
 NODE* timKiemT(LIST l, char maTruyen[]);
 NODEMUON* timKiemKH(QUEUE q, char maKhachHang[]);
 void themTruyen(QUEUE &q, LIST l, char maTruyen[]);
 int xoaTruyen(QUEUE &q, char maTruyen[]);
 int soLuongQuyenTruyen(QUEUE q);
 bool suaTruyen(LIST &L, char maTruyen[]);
-void nhapInfoKhachHang(KHACHHANG &tmp);
-void nhapNgayMuon(DATE &tmp);
 NODEMUON* timTheoTen(QUEUE q, char tenKhachHang[]);
 QUEUE danhSachKHTheoDiaChi(QUEUE q, char diaChi[]);
 void xuatDanhSachTruyen1KHDaMuon(QUEUE q, char maKhachHang[]);
@@ -45,20 +32,6 @@ int main() {
 
 void initList(LIST &l) {
 	l.pHead = l.pTail = NULL;
-}
-
-TRUYEN nhap1QuyenTruyen() {
-	TRUYEN x;
-	fflush(stdin);
-	printf("Nhap ma truyen: ");gets(x.id);
-	printf("Nhap ten quyen truyen: ");gets(x.name);
-	printf("Nhap ten tac gia: ");gets(x.tacGia);
-	printf("Nhap the loai truyen: ");gets(x.theLoai);
-	printf("Nhap ten nha xuat ban: "); gets(x.nxb);
-	printf("Nhap nam xuat ban cua quyen truyen: ");scanf("%d", &x.year);
-	printf("Nhap so luong quyen truyen: ");scanf("%d", &x.soLuong);
-	fflush(stdin);
-	return x;
 }
 
 void nhapVaoDanhSachTruyen(LIST &l) {
@@ -88,21 +61,7 @@ void nhapVaoDanhSachTruyen(LIST &l) {
 	}
 }
 
-void xuatDanhSachCacQuyenTruyen(LIST l) {
-	if(l.pHead == NULL)
-		printf("Danh sach khong ton tai.\n");
 
-	for(NODE* p = l.pHead; p != NULL; p = p->pNext) {
-		printf("Ma truyen: %s\n", p->data.id);
-		printf("Ten truyen: %s\n", p->data.name);
-		printf("Tac gia: %s\n", p->data.tacGia);
-		printf("The loai: %s\n", p->data.theLoai);
-		printf("Nha xuat ban: %s\n", p->data.nxb);
-		printf("Nam xuat ban: %d\n", p->data.year);
-		printf("So luong: %d\n", p->data.soLuong);
-		printf("\n");
-	}
-}
 
 NODEMUON* timKiemKH(QUEUE q, char maKhachHang[]) {
 	if(isEmpty(q))
@@ -207,20 +166,6 @@ bool suaTruyen(LIST &l, char maTruyen[]) {
 	return true;
 }
 
-void nhapInfoKhachHang(KHACHHANG &tmp) {
-	fflush(stdin);
-	printf("Nhap ma khach hang: ");gets(tmp.maKH);
-	printf("Nhap ten khach hang: ");gets(tmp.tenKH);
-	printf("Nhap dia chi khach hang: ");gets(tmp.diaChi);
-	printf("Nhap so dien thoai khach hang: ");gets(tmp.sdt);
-}
-
-void nhapNgayMuon(DATE &tmp) {
-	printf("Nhap ngay muon: ");scanf("%d", &tmp.ngay);
-	printf("Nhap thang muon: ");scanf("%d", &tmp.thang);
-	printf("Nhap nam muon: ");scanf("%d", &tmp.nam);
-}
-
 NODEMUON* timTheoTen(QUEUE q, char tenKhachHang[]) {
 	if(isEmpty(q))
 		return NULL;
@@ -247,14 +192,7 @@ void xuatDanhSachTruyen1KHDaMuon(QUEUE q, char maKhachHang[]) {
 	NODEMUON* p = q.front;
 	while(p != NULL) {
 		if(strcmp(p->kh.maKH, maKhachHang) == 0) {
-			printf("Ma truyen: %s\n", p->data.id);
-			printf("Ten truyen: %s\n", p->data.name);
-			printf("Tac gia: %s\n", p->data.tacGia);
-			printf("The loai: %s\n", p->data.theLoai);
-			printf("Nha xuat ban: %s\n", p->data.nxb);
-			printf("Nam xuat ban: %d\n", p->data.year);
-			printf("So luong: %d\n", p->data.soLuong);
-			printf("\n");
+			xuatTruyen(p->data);
 		}
 		p = p->pNext;
 	}
@@ -266,14 +204,7 @@ void xuatTruyenTheoTheLoai(LIST l, char theLoai[]) {
 
 	for(NODE* p = l.pHead; p != NULL; p = p->pNext) {
 		if(strcmp(p->data.theLoai, theLoai) == 0) {
-			printf("Ma truyen: %s\n", p->data.id);
-			printf("Ten truyen: %s\n", p->data.name);
-			printf("Tac gia: %s\n", p->data.tacGia);
-			printf("The loai: %s\n", p->data.theLoai);
-			printf("Nha xuat ban: %s\n", p->data.nxb);
-			printf("Nam xuat ban: %d\n", p->data.year);
-			printf("So luong: %d\n", p->data.soLuong);
-			printf("\n");
+			xuatTruyen(p->data);
 		}
 	}
 }
@@ -283,14 +214,7 @@ void xuatTruyenTheoNgayMuon(QUEUE q, DATE ngayMuon) {
 		return;
 	for(NODEMUON* p = q.front;p != NULL; p = p->pNext) {
 		if(p->ngayMuon.ngay == ngayMuon.ngay && p->ngayMuon.thang == ngayMuon.thang && p->ngayMuon.nam == ngayMuon.nam) {
-			printf("Ma truyen: %s\n", p->data.id);
-			printf("Ten truyen: %s\n", p->data.name);
-			printf("Tac gia: %s\n", p->data.tacGia);
-			printf("The loai: %s\n", p->data.theLoai);
-			printf("Nha xuat ban: %s\n", p->data.nxb);
-			printf("Nam xuat ban: %d\n", p->data.year);
-			printf("So luong: %d\n", p->data.soLuong);
-			printf("\n");
+			xuatTruyen(p->data);
 		}
 	}
 }
@@ -300,14 +224,7 @@ void danhSachTruyenMuonQuaHan(QUEUE q, DATE ngayMuon) {
 		return;
 	for(NODEMUON* p = q.front;p != NULL; p = p->pNext) {
 		if(p->ngayMuon.ngay >= ngayMuon.ngay && p->ngayMuon.thang >= ngayMuon.thang && p->ngayMuon.nam >= ngayMuon.nam) {
-			printf("Ma truyen: %s\n", p->data.id);
-			printf("Ten truyen: %s\n", p->data.name);
-			printf("Tac gia: %s\n", p->data.tacGia);
-			printf("The loai: %s\n", p->data.theLoai);
-			printf("Nha xuat ban: %s\n", p->data.nxb);
-			printf("Nam xuat ban: %d\n", p->data.year);
-			printf("So luong: %d\n", p->data.soLuong);
-			printf("\n");
+			xuatTruyen(p->data);
 		}
 	}
 }

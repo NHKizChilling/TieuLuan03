@@ -8,7 +8,7 @@ void initList(LIST &l);
 void nhapVaoDanhSachTruyen(LIST &l);
 NODE* timKiemT(LIST l, char maTruyen[]);
 NODEMUON* timKiemKH(QUEUE q, char maKhachHang[]);
-void themTruyen(QUEUE &q, LIST l, char maTruyen[]);
+void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]);
 int xoaTruyen(QUEUE &q, char maTruyen[]);
 int soLuongQuyenTruyen(QUEUE q);
 bool suaTruyen(LIST &L, char maTruyen[]);
@@ -20,15 +20,124 @@ void xuatTruyenTheoNgayMuon(QUEUE q, DATE ngayMuon);
 void danhSachTruyenMuonQuaHan(QUEUE q);
 
 int main() {
-	// QUEUE q;
-	// TRUYEN x;
-	// nhapVaoDanhSachTruyen(q);
-	// //themTruyen(q);
-	// //xoaTruyen(q, "13");
-	// //suaTruyen(q, "13");
-	// xuatDanhSachCacQuyenTruyen(q);
+	LIST danhSachTruyen;
+	QUEUE danhSachMuon;
+	initList(danhSachTruyen);
+	initQueue(danhSachMuon);
+	int choice;
+	char maTruyen[20];
+	char theLoai[20];
+	char maKhachHang[20];
+	char tenKhachHang[50];
+	char diaChi[100];
+	DATE ngayMuon;
+	do {
+		printf("========== MENU ==========\n");
+		printf("1. Nhap danh sach truyen\n");
+		printf("2. Them truyen vao danh sach muon\n");
+		printf("3. Xoa truyen khoi danh sach muon\n");
+		printf("4. Hien thi so luong quyen truyen trong danh sach muon\n");
+		printf("5. Sua thong tin truyen\n");
+		printf("6. Tim kiem khach hang theo ten\n");
+		printf("7. Hien thi danh sach khach hang theo dia chi\n");
+		printf("8. Hien thi danh sach truyen da muon cua mot khach hang\n");
+		printf("9. Hien thi danh sach truyen theo the loai\n");
+		printf("10. Hien thi danh sach truyen theo ngay muon\n");
+		printf("11. Hien thi danh sach truyen muon qua han\n");
+		printf("0. Thoat chuong trinh\n");
+		printf("==========================\n");
+		printf("Nhap lua chon cua ban: ");
+		scanf("%d", &choice);
+		fflush(stdin);
+		switch(choice) {
+			case 1:
+				nhapVaoDanhSachTruyen(danhSachTruyen);
+				break;
+			case 2:
+				printf("Nhap ma truyen: ");
+				gets(maTruyen);
+				fflush(stdin);
+				printf("Nhap ma khach hang: ");
+				gets(maKhachHang);
+				fflush(stdin);
+				themTruyen(danhSachMuon, danhSachTruyen, maTruyen, maKhachHang);
+				break;
+			case 3:
+				printf("Nhap ma truyen: ");
+				gets(maTruyen);
+				fflush(stdin);
+				xoaTruyen(danhSachMuon, maTruyen);
+				break;
+			case 4:
+				printf("So luong quyen truyen trong danh sach muon: %d\n", soLuongQuyenTruyen(danhSachMuon));
+				break;
+			case 5:
+				printf("Nhap ma truyen: ");
+				gets(maTruyen);
+				fflush(stdin);
+				suaTruyen(danhSachTruyen, maTruyen);
+				break;
+			case 6: {
+				printf("Nhap ten khach hang: ");
+				gets(tenKhachHang);
+				fflush(stdin);
+				NODEMUON* khachHang = timTheoTen(danhSachMuon, tenKhachHang);
+				if(khachHang != NULL) {
+					printf("Thong tin khach hang:\n");
+					xuatKH(khachHang->kh);
+				}
+				else {
+					printf("Khong tim thay khach hang.\n");
+				}
+				break;
+			}
+			case 7: {
+				printf("Nhap dia chi: ");
+				scanf("%s", diaChi);
+				fflush(stdin);
+				QUEUE dsKHTheoDiaChi = danhSachKHTheoDiaChi(danhSachMuon, diaChi);
+				if(isEmpty(dsKHTheoDiaChi)) {
+					printf("Khong tim thay khach hang nao o dia chi nay.\n");
+				}
+				else {
+					printf("Danh sach khach hang theo dia chi %s:\n", diaChi);
+					for(NODEMUON* p = dsKHTheoDiaChi.front; p != NULL; p = p->pNext) {
+						xuatKH(p->kh);
+					}
+				}
+				break;
+			}
+			case 8:
+				printf("Nhap ma khach hang: ");
+				gets(maKhachHang);
+				fflush(stdin);
+				xuatDanhSachTruyen1KHDaMuon(danhSachMuon, maKhachHang);
+				break;
+			case 9:
+				printf("Nhap the loai: ");
+				gets(theLoai);
+				fflush(stdin);
+				xuatTruyenTheoTheLoai(danhSachTruyen, theLoai);
+				break;
+			case 10:
+				printf("Nhap ngay muon (dd/mm/yyyy): ");
+				scanf("%d/%d/%d", &ngayMuon.ngay, &ngayMuon.thang, &ngayMuon.nam);
+				fflush(stdin);
+				xuatTruyenTheoNgayMuon(danhSachMuon, ngayMuon);
+				break;
+			case 11:
+				danhSachTruyenMuonQuaHan(danhSachMuon);
+				break;
+			case 0:
+				printf("Thoat chuong trinh.\n");
+				break;
+			default:
+				printf("Lua chon khong hop le. Vui long chon lai.\n");
+				break;
+		}
+	} while(choice != 0);
+	return 0;
 }
-
 
 void initList(LIST &l) {
 	l.pHead = l.pTail = NULL;
@@ -115,7 +224,7 @@ int xoaTruyen(QUEUE &q, char maTruyen[]){
 	NODEMUON *pDel = q.front;
 	NODEMUON *pPre = NULL;
 	if(q.front == NULL){
-		printf("Mang khong co sinh vien nao.\n");
+		printf("Khong co khach hang nao trong danh sach.\n");
 		exit(0);
 	}
 	while (pDel != NULL){

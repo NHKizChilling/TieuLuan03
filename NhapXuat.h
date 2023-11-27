@@ -61,13 +61,6 @@ void nhapNgayMuon(DATE &tmp) {
 	printf("Nhap nam muon: ");scanf("%d", &tmp.nam);
 }
 
-void xuatInfo(NODEMUON* p) {
-    xuatKH(p->kh);
-    xuatTruyen(p->data);
-    printf("\n");
-}
-
-
 void xuatKH(KHACHHANG tmp) {
     printf("Ma khach hang: %s\n", tmp.maKH);
     printf("Ten khach hang: %s\n", tmp.tenKH);
@@ -83,5 +76,11 @@ void xuatTruyen(TRUYEN tmp) {
     printf("Nha xuat ban: %s\n", tmp.nxb);
     printf("Nam xuat ban: %d\n", tmp.year);
     printf("So luong: %d\n", tmp.soLuong);
+    printf("\n");
+}
+
+void xuatInfo(NODEMUON* p) {
+    xuatKH(p->kh);
+    xuatTruyen(p->data);
     printf("\n");
 }

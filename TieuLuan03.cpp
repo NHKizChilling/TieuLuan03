@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h> 
 #include <stdlib.h>
-#include "Queue.h"
 #include "NhapXuat.h"
 
 void initList(LIST &l);
@@ -17,7 +16,7 @@ QUEUE danhSachKHTheoDiaChi(QUEUE q, char diaChi[]);
 void xuatDanhSachTruyen1KHDaMuon(QUEUE q, char maKhachHang[]);
 void xuatTruyenTheoTheLoai(LIST l, char theLoai[]);
 void xuatTruyenTheoNgayMuon(QUEUE q, DATE ngayMuon);
-void danhSachTruyenMuonQuaHan(QUEUE q);
+void danhSachTruyenMuonQuaHan(QUEUE q, DATE ngayMuon);
 
 int main() {
 	LIST danhSachTruyen;
@@ -126,7 +125,7 @@ int main() {
 				xuatTruyenTheoNgayMuon(danhSachMuon, ngayMuon);
 				break;
 			case 11:
-				danhSachTruyenMuonQuaHan(danhSachMuon);
+				danhSachTruyenMuonQuaHan(danhSachMuon, ngayMuon);
 				break;
 			case 0:
 				printf("Thoat chuong trinh.\n");

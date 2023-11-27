@@ -2,9 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Queue.h"
+#pragma once
 
-#ifndef NHAPXUAT_H
-#define NHAPXUAT_H
+#ifndef NhapXuat_h
+#define NhapXuat_h
+
 typedef struct NodeT { // Node chỉ để chưa danh sách truyện
     TRUYEN data;
     NodeT* pNext;
@@ -15,7 +17,7 @@ typedef struct ListT { // Danh sách truyện
 	NODE* pTail;
 }LIST;
 
-#endif
+
 
 TRUYEN nhap1QuyenTruyen() {
 	TRUYEN x;
@@ -61,6 +63,7 @@ void nhapNgayMuon(DATE &tmp) {
 	printf("Nhap nam muon: ");scanf("%d", &tmp.nam);
 }
 
+
 void xuatKH(KHACHHANG tmp) {
     printf("Ma khach hang: %s\n", tmp.maKH);
     printf("Ten khach hang: %s\n", tmp.tenKH);
@@ -84,3 +87,5 @@ void xuatInfo(NODEMUON* p) {
     xuatTruyen(p->data);
     printf("\n");
 }
+
+#endif

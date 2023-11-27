@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "Queue.h"
-#pragma once
+//#pragma once
 
 #ifndef NhapXuat_h
 #define NhapXuat_h
@@ -23,13 +23,13 @@ TRUYEN nhap1QuyenTruyen() {
 	TRUYEN x;
 	fflush(stdin);
 	printf("Nhap ma truyen: ");gets(x.id);
+	fflush(stdin);
 	printf("Nhap ten quyen truyen: ");gets(x.name);
 	printf("Nhap ten tac gia: ");gets(x.tacGia);
 	printf("Nhap the loai truyen: ");gets(x.theLoai);
 	printf("Nhap ten nha xuat ban: "); gets(x.nxb);
 	printf("Nhap nam xuat ban cua quyen truyen: ");scanf("%d", &x.year);
 	printf("Nhap so luong quyen truyen: ");scanf("%d", &x.soLuong);
-	fflush(stdin);
 	return x;
 }
 

@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef Queue_h
-#define Queue_h
+#ifndef QUEUE_H
+#define QUEUE_H
 
 typedef struct Day {
 	int ngay;
@@ -28,6 +28,8 @@ typedef struct truyen {
     int soLuong;
 }TRUYEN;
 
+#endif
+
 typedef struct NodeMuon { // NODE chưa thông tin truyện và khách hàng để thêm vào queue
 	TRUYEN data;
 	KhachHang kh;
@@ -40,8 +42,6 @@ typedef struct Queue {
 	NODEMUON* front;
 	NODEMUON* rear;	
 }QUEUE;
-
-#endif
 
 //Khoi tao Queue
 bool initQueue(QUEUE &q) {
@@ -103,4 +103,3 @@ int size(QUEUE q) {
     }
     return count;
 }
-

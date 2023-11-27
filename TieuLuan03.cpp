@@ -17,6 +17,8 @@ void xuatDanhSachTruyen1KHDaMuon(QUEUE q, char maKhachHang[]);
 void xuatTruyenTheoTheLoai(LIST l, char theLoai[]);
 void xuatTruyenTheoNgayMuon(QUEUE q, DATE ngayMuon);
 void danhSachTruyenMuonQuaHan(QUEUE q, DATE ngayMuon);
+void readBooksFromFile(const char* filePath, LIST& bookList);
+void writeBooksToFile(const char* filePath, LIST bookList);
 
 int main() {
 	LIST danhSachTruyen;
@@ -43,6 +45,8 @@ int main() {
 		printf("9. Hien thi danh sach truyen theo the loai\n");
 		printf("10. Hien thi danh sach truyen theo ngay muon\n");
 		printf("11. Hien thi danh sach truyen muon qua han\n");
+		printf("12. Doc danh sach truyen tu file\n");
+		printf("13. Ghi danh sach truyen vao file\n"); // Modified: Changed the menu option
 		printf("0. Thoat chuong trinh\n");
 		printf("==========================\n");
 		printf("Nhap lua chon cua ban: ");
@@ -65,7 +69,10 @@ int main() {
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
 				fflush(stdin);
-				xoaTruyen(danhSachMuon, maTruyen);
+				if(xoaTruyen(danhSachMuon, maTruyen))
+					printf("Xoa thanh cong.\n");
+				else
+					printf("Khong tim thay truyen.\n");
 				break;
 			case 4:
 				printf("So luong quyen truyen trong danh sach muon: %d\n", soLuongQuyenTruyen(danhSachMuon));
@@ -74,7 +81,10 @@ int main() {
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
 				fflush(stdin);
-				suaTruyen(danhSachTruyen, maTruyen);
+				if(suaTruyen(danhSachTruyen, maTruyen))
+					printf("Sua thong tin truyen thanh cong.\n");
+				else
+					printf("Khong tim thay truyen.\n");
 				break;
 			case 6: {
 				printf("Nhap ten khach hang: ");
@@ -127,6 +137,16 @@ int main() {
 			case 11:
 				danhSachTruyenMuonQuaHan(danhSachMuon, ngayMuon);
 				break;
+			case 12: 
+				readBooksFromFile("T:/books.txt", danhSachTruyen);
+				break;
+			case 13:
+				printf("Nhap duong dan file: ");
+				char filePath[100];
+				scanf("%s", filePath);
+				fflush(stdin);
+				writeBooksToFile(filePath, danhSachTruyen);
+				break;
 			case 0:
 				printf("Thoat chuong trinh.\n");
 				break;
@@ -143,7 +163,6 @@ void initList(LIST &l) {
 }
 
 void nhapVaoDanhSachTruyen(LIST &l) {
-	initList(l);
 	TRUYEN x;
 	int n;
 	do {
@@ -165,6 +184,7 @@ void nhapVaoDanhSachTruyen(LIST &l) {
 			l.pTail->pNext = p;
 			l.pTail = p;
 		}
+		printf("Them thanh cong quyen truyen co ma %s vao cua hang.\n", x.id);
 		i++;
 	}
 }
@@ -223,7 +243,7 @@ int xoaTruyen(QUEUE &q, char maTruyen[]){
 	NODEMUON *pDel = q.front;
 	NODEMUON *pPre = NULL;
 	if(q.front == NULL){
-		printf("Khong co khach hang nao trong danh sach.\n");
+		printf("Khong co phieu muon trong danh sach.\n");
 		exit(0);
 	}
 	while (pDel != NULL){
@@ -278,7 +298,7 @@ NODEMUON* timTheoTen(QUEUE q, char tenKhachHang[]) {
 	if(isEmpty(q))
 		return NULL;
 	for(NODEMUON* p = q.front;p != NULL; p = p->pNext) {
-		if(strcmp(p->kh.tenKH, tenKhachHang) == 0)
+		if(stricmp(p->kh.tenKH, tenKhachHang) == 0)
 			return p;
 	}
 	return NULL;
@@ -290,7 +310,7 @@ QUEUE danhSachKHTheoDiaChi(QUEUE q, char diaChi[]) {
 	if(isEmpty(q))
 		return tmp;
 	for(NODEMUON* p = q.front;p != NULL; p = p->pNext) {
-		if(strcmp(p->kh.diaChi, diaChi) == 0)
+		if(stricmp(p->kh.diaChi, diaChi) == 0)
 			enQueue(tmp, *p);
 	}
 	return tmp;
@@ -311,7 +331,7 @@ void xuatTruyenTheoTheLoai(LIST l, char theLoai[]) {
 		printf("Danh sach khong ton tai.\n");
 
 	for(NODE* p = l.pHead; p != NULL; p = p->pNext) {
-		if(strcmp(p->data.theLoai, theLoai) == 0) {
+		if(stricmp(p->data.theLoai, theLoai) == 0) {
 			xuatTruyen(p->data);
 		}
 	}
@@ -335,4 +355,64 @@ void danhSachTruyenMuonQuaHan(QUEUE q, DATE ngayMuon) {
 			xuatTruyen(p->data);
 		}
 	}
+}
+
+void readBooksFromFile(const char* filePath, LIST& bookList) {
+	FILE* file = fopen(filePath, "r");
+	if (file == NULL) {
+		printf("Cannot open file.\n");
+		return;
+	}
+	initList(bookList);
+	char line[256];
+	while (fgets(line, sizeof(line), file)) {
+		TRUYEN book;
+		char* token = strtok(line, "|");
+		strcpy(book.id, token);
+		token = strtok(NULL, "|");
+		strcpy(book.name, token);
+		token = strtok(NULL, "|");
+		strcpy(book.tacGia, token);
+		token = strtok(NULL, "|");
+		strcpy(book.theLoai, token);
+		token = strtok(NULL, "|");
+		strcpy(book.nxb, token);
+		token = strtok(NULL, "|");
+		book.year = atoi(token);
+		token = strtok(NULL, "|");
+		book.soLuong = atoi(token);
+
+		NODE* newNode = (NODE*)malloc(sizeof(NODE));
+		newNode->data = book;
+		newNode->pNext = NULL;
+
+		if (bookList.pHead == NULL) {
+			bookList.pHead = newNode;
+			bookList.pTail = newNode;
+		} else {
+			bookList.pTail->pNext = newNode;
+			bookList.pTail = newNode;
+		}
+		printf("Them thanh cong quyen truyen co ma %s vao cua hang.\n", book.id);
+	}
+
+	fclose(file);
+}
+
+void writeBooksToFile(const char* filePath, LIST bookList) {
+	FILE* file = fopen(filePath, "w");
+	if (file == NULL) {
+		printf("Error opening file.\n");
+		return;
+	}
+
+	NODE* currentNode = bookList.pHead;
+	while (currentNode != NULL) {
+		TRUYEN book = currentNode->data;
+		fprintf(file, "%s|%s|%s|%s|%s|%d|%d\n", book.id, book.name, book.tacGia, book.theLoai, book.nxb, book.year, book.soLuong);
+		printf("Ghi thanh cong quyen truyen co ma %s vao file.\n", book.id);
+		currentNode = currentNode->pNext;
+	}
+
+	fclose(file);
 }

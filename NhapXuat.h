@@ -49,12 +49,14 @@ void xuatDanhSachCacQuyenTruyen(LIST l) {
 	}
 }
 
-void nhapInfoKhachHang(KHACHHANG &tmp) {
+KHACHHANG nhapInfoKhachHang() {
+	KHACHHANG tmp;
 	fflush(stdin);
 	printf("Nhap ma khach hang: ");gets(tmp.maKH);
 	printf("Nhap ten khach hang: ");gets(tmp.tenKH);
 	printf("Nhap dia chi khach hang: ");gets(tmp.diaChi);
 	printf("Nhap so dien thoai khach hang: ");gets(tmp.sdt);
+	return tmp;
 }
 
 void nhapNgayMuon(DATE &tmp) {

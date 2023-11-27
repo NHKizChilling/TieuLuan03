@@ -28,11 +28,9 @@ typedef struct truyen {
     int soLuong;
 }TRUYEN;
 
-#endif
-
 typedef struct NodeMuon { // NODE chưa thông tin truyện và khách hàng để thêm vào queue
-	TRUYEN data;
-	KhachHang kh;
+	TRUYEN data;    
+	KHACHHANG kh;
 	DATE ngayMuon;
 	NodeMuon* pNext;
 }NODEMUON;
@@ -42,6 +40,8 @@ typedef struct Queue {
 	NODEMUON* front;
 	NODEMUON* rear;	
 }QUEUE;
+
+#endif
 
 //Khoi tao Queue
 bool initQueue(QUEUE &q) {

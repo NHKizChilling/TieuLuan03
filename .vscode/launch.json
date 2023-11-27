@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "t:/Lab Thuc hanh/TieuLuan03",
-      "program": "t:/Lab Thuc hanh/TieuLuan03/build/Debug/outDebug",
+      "cwd": "t:/Lab Thuc hanh/TieuLuan03/TieuLuan03",
+      "program": "t:/Lab Thuc hanh/TieuLuan03/TieuLuan03/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

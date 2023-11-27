@@ -7,7 +7,7 @@ void initList(LIST &l);
 void nhapVaoDanhSachTruyen(LIST &l);
 NODE* timKiemT(LIST l, char maTruyen[]);
 NODEMUON* timKiemKH(QUEUE q, char maKhachHang[]);
-void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]);
+int themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]);
 int xoaTruyen(QUEUE &q, char maTruyen[]);
 int soLuongQuyenTruyen(QUEUE q);
 bool suaTruyen(LIST &L, char maTruyen[]);
@@ -56,15 +56,22 @@ int main() {
 			case 1:
 				nhapVaoDanhSachTruyen(danhSachTruyen);
 				break;
-			case 2:
+			case 2:{
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
 				fflush(stdin);
 				printf("Nhap ma khach hang: ");
 				gets(maKhachHang);
 				fflush(stdin);
-				themTruyen(danhSachMuon, danhSachTruyen, maTruyen, maKhachHang);
+				int check = themTruyen(danhSachMuon, danhSachTruyen, maTruyen, maKhachHang);
+				if(check == 1)
+					printf("Them thanh cong.\n");
+				else if(check == -1)
+					printf("Them khong thanh cong.\n");
+				else
+					printf("Khong tim thay truyen.\n");
 				break;
+			}
 			case 3:
 				printf("Nhap ma truyen: ");
 				gets(maTruyen);
@@ -211,10 +218,10 @@ NODE* timKiemT(LIST l, char maTruyen[]) {
 	return NULL;
 }
 
-void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
+int themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
 	NODE* truyen = timKiemT(l, maTruyen);
 	if(truyen == NULL)
-		return;
+		return 1;
 	NODEMUON* khachHang = timKiemKH(q, maKhachHang);
 	if(khachHang->kh.maKH == NULL) {
 		printf("Khong tim thay khach hang.\n");
@@ -225,18 +232,19 @@ void themTruyen(QUEUE &q, LIST l, char maTruyen[], char maKhachHang[]) {
 		scanf("%d", &choice);
 		fflush(stdin);
 		if(choice == 1) {
-			KHACHHANG tmp;
-			nhapInfoKhachHang(tmp);
-			khachHang->kh = tmp;
+			KHACHHANG tmp1;
+			nhapInfoKhachHang(tmp1);
+			khachHang->kh = tmp1;
 		}
 		else
-			return;
+			return -1;
 	}
 	NODEMUON tmp;
 	tmp.data = truyen->data;
 	tmp.kh = khachHang->kh;
 	nhapNgayMuon(tmp.ngayMuon);
 	enQueue(q, tmp);
+	return 1;
 }
 
 int xoaTruyen(QUEUE &q, char maTruyen[]){
